@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas Agendadas</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Citas Agendadas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody id="citasBody">
+            <!-- Las citas se insertarán aquí -->
+        </tbody>
+    </table>
+
+    <script>
+        // Obtener las citas desde el backend y mostrarlas en la tabla
+        fetch('/citas')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const citasBody = document.getElementById('citasBody');
+                    data.citas.forEach(cita => {
+                        const row = document.createElement('tr');
+
+                        row.innerHTML = `
+                            <td>${cita.service}</td>
+                            <td>${cita.date}</td>
+                            <td>${cita.time}</td>
+                            <td>${cita.name}</td>
+                            <td>${cita.email}</td>
+                            <td>${cita.phone}</td>
+                        `;
+
+                        citasBody.appendChild(row);
+                    });
+                } else {
+                    alert('Error al cargar las citas');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al obtener las citas. Verifique su conexión y vuelva a intentarlo.');
+            });
+    </script>
+</body>
+</html>
